@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hover Card Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+
+    .hoverable {
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+      position: relative;
+      display: inline-block;
+    }
+
+    .hover-card {
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px;
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      transition: visibility 0s, opacity 0.2s ease-in-out;
+    }
+
+    .hoverable:hover .hover-card,
+    .hoverable:focus-within .hover-card {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .hover-card p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <p>
+    In computer science, the term <span class="hoverable" tabindex="0">algorithm
+      <span class="hover-card">
+        <p>An algorithm is a step-by-step procedure or formula for solving a problem.</p>
+      </span>
+    </span> is fundamental.
+    Another critical concept is <span class="hoverable" tabindex="0">data structure
+      <span class="hover-card">
+        <p>A data structure is a particular way of organizing and storing data in a computer.</p>
+      </span>
+    </span>.
+  </p>
+
+  <script>
+    // Add click toggle for better accessibility on mobile
+    document.querySelectorAll('.hoverable').forEach(item => {
+      item.addEventListener('click', event => {
+        event.stopPropagation(); // Prevent triggering the document click listener
+        const card = item.querySelector('.hover-card');
+        const isVisible = card.style.visibility === 'visible';
+        document.querySelectorAll('.hover-card').forEach(c => {
+          c.style.visibility = 'hidden';
+          c.style.opacity = '0';
+        });
+        card.style.visibility = isVisible ? 'hidden' : 'visible';
+        card.style.opacity = isVisible ? '0' : '1';
+      });
+    });
+
+    // Close other cards when clicking elsewhere
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.hoverable')) {
+        document.querySelectorAll('.hover-card').forEach(card => {
+          card.style.visibility = 'hidden';
+          card.style.opacity = '0';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
